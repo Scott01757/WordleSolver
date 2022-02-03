@@ -10,50 +10,55 @@ namespace WordleSolver
         static void Main(string[] args)
         {
             var wordList = ReadWordList();
-            // var mostUsed = SortMostUsedLetters(wordList);
+            var mostUsed = SortMostUsedLetters(wordList);
 
-            // Console.WriteLine("most used letters:");
+            Console.WriteLine("most used letters:");
 
-            //foreach (var c in mostUsed)
-            //{
-            //    float percent = c.Value / (float)wordList.Length;
-            //    Console.WriteLine($"{c.Key}: {percent}");
-            //}
+            foreach (var c in mostUsed)
+            {
+                float percent = c.Value / (float)wordList.Length;
+                Console.WriteLine($"{c.Key}: {percent}");
+            }
 
             // var word1 = FindWordContaining(wordList, new List<char>() { mostUsed[0].Key, mostUsed[1].Key, mostUsed[2].Key, mostUsed[3].Key, mostUsed[4].Key });
 
             // var word2 = FindWordContaining(wordList, new List<char>() { mostUsed[5].Key, mostUsed[6].Key, mostUsed[7].Key, mostUsed[8].Key, mostUsed[10].Key });
-
-            Console.WriteLine("Enter what  you know (use ? for unknown letters):");
+            Console.WriteLine("Enter what  you know (use ? for unknown letters), or leave blank to stop:");
             var input = Console.ReadLine();
 
-            var matches = wordList.Where(w => input[0] == '?' || input[0] == w[0])
-                .Where(w => input[1] == '?' || input[1] == w[1])
-                .Where(w => input[2] == '?' || input[2] == w[2])
-                .Where(w => input[3] == '?' || input[3] == w[3])
-                .Where(w => input[4] == '?' || input[4] == w[4]);
+            while (!string.IsNullOrWhiteSpace(input))
+            {
+                var matches = wordList.Where(w => input[0] == '?' || input[0] == w[0])
+                    .Where(w => input[1] == '?' || input[1] == w[1])
+                    .Where(w => input[2] == '?' || input[2] == w[2])
+                    .Where(w => input[3] == '?' || input[3] == w[3])
+                    .Where(w => input[4] == '?' || input[4] == w[4]);
 
-            matches = matches.ToList(); // force evaluation
+                matches = matches.ToList(); // force evaluation
 
-            Console.WriteLine("Enter unmatched letters:");
-            input = Console.ReadLine();
+                Console.WriteLine("Enter unmatched letters:");
+                input = Console.ReadLine();
 
-            foreach(char c in input)
-                matches = matches.Where(w => w.Contains(c));
+                foreach (char c in input)
+                    matches = matches.Where(w => w.Contains(c));
 
-            matches = matches.ToList();
+                matches = matches.ToList();
 
-            Console.WriteLine("Enter letters known to not be in the word");
-            input = Console.ReadLine();
-            foreach (char c in input)
-                matches = matches.Where(w => !w.Contains(c));
+                Console.WriteLine("Enter letters known to not be in the word");
+                input = Console.ReadLine();
+                foreach (char c in input)
+                    matches = matches.Where(w => !w.Contains(c));
 
-            matches = matches.ToList();
+                matches = matches.ToList();
 
-            Console.WriteLine("Matches:");
-            foreach (var word in matches)
-                Console.WriteLine(word);
+                Console.WriteLine("Matches:");
+                foreach (var word in matches)
+                    Console.WriteLine(word);
 
+                Console.WriteLine();
+                Console.WriteLine("Enter what  you know (use ? for unknown letters), or leave blank to stop:");
+                input = Console.ReadLine();
+            }
         }
 
         private static string FindWordContaining(string[] words, List<char> letters)
